@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="480.0" prefWidth="640.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.algoritmo.floyd.warshall.MainViewController">
+<VBox alignment="CENTER" prefHeight="800.0" prefWidth="1000.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.algoritmo.floyd.warshall.MainViewController">
   <Label text="Floyd-Warshall Path Finder" />
     <Label text="Filas:" />
     <TextField fx:id="filasField" prefHeight="25.0" prefWidth="356.0" />

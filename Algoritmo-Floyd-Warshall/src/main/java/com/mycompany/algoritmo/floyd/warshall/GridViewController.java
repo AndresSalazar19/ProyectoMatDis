@@ -6,10 +6,10 @@ package com.mycompany.algoritmo.floyd.warshall;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -27,6 +27,7 @@ public class GridViewController {
 
     private Nodo[][] nodos;
     private int nodoCounter = 1;
+    private PriorityQueue<Integer> numDisponibles = new PriorityQueue<>();
     private boolean linkingMode = false;
     private Nodo selectedNodo = null;
     private List<Line> enlaces = new ArrayList<>();
@@ -52,7 +53,7 @@ public class GridViewController {
                 stackPane.setStyle("-fx-alignment: center;");
                 stackPane.setOnMouseClicked(e -> handleNodoClick(e, fila, columna));
                 grid.add(stackPane, j, i);
-                nodos[i][j] = new Nodo(i, j, label);
+                nodos[i][j] = new Nodo(i, j, label, stackPane);
             }
         }
     }
@@ -60,11 +61,18 @@ public class GridViewController {
     private void handleNodoClick(javafx.scene.input.MouseEvent e, int fila, int columna) {
         Nodo nodo = nodos[fila][columna];
         if (!nodo.isCreated()) {
-            nodo.crearNodo("N" + nodoCounter++);
+            String nodoName;
+            if (numDisponibles.isEmpty()) {
+                nodoName = "N" + nodoCounter++;
+            } else {
+                nodoName = "N" + numDisponibles.poll();
+            }
+            nodo.crearNodo(nodoName);
             convertirACirculo(nodo);
         } else if (!linkingMode) {
+            int nodoNumber = Integer.parseInt(nodo.getNombre().substring(1));
+            numDisponibles.add(nodoNumber);
             nodo.borrarNodo();
-            nodoCounter--;
             convertirAPunto(nodo);
         } else {
             handleLinking(nodo);
@@ -76,17 +84,26 @@ public class GridViewController {
         Circle circle = new Circle(15, Color.LIGHTBLUE);
         Text text = new Text(nodo.getNombre());
         text.setStyle("-fx-font-size: 14;");
-        StackPane stackPane = (StackPane) label.getParent();
-        stackPane.getChildren().clear();
-        stackPane.getChildren().addAll(circle, text);
+        StackPane stackPane = nodo.getStackPane();
+        if (stackPane != null) {
+            stackPane.getChildren().clear();
+            stackPane.getChildren().addAll(circle, text);
+        }
     }
 
     private void convertirAPunto(Nodo nodo) {
+        System.out.println("Convirtiendo a punto");
         Label label = nodo.getLabel();
         label.setText(".");
-        StackPane stackPane = (StackPane) label.getParent();
-        stackPane.getChildren().clear();
-        stackPane.getChildren().add(label);
+        label.setStyle("-fx-alignment: center; -fx-border-color: black; -fx-border-width: 1px;");
+        StackPane stackPane = nodo.getStackPane();
+        if (stackPane == null) {
+            System.out.println("stackPane es null");
+        } else {
+            System.out.println("listo para actualizar");
+            stackPane.getChildren().clear();
+            stackPane.getChildren().add(label);
+        }
     }
 
     public void enableLinkingMode() {
@@ -104,8 +121,8 @@ public class GridViewController {
     }
 
     private void crearEnlace(Nodo from, Nodo to) {
-        Line line = new Line(from.getLabel().getParent().getLayoutX(), from.getLabel().getParent().getLayoutY(),
-                to.getLabel().getParent().getLayoutX(), to.getLabel().getParent().getLayoutY());
+        Line line = new Line(from.getStackPane().getLayoutX(), from.getStackPane().getLayoutY(),
+                to.getStackPane().getLayoutX(), to.getStackPane().getLayoutY());
         Text distanceText = new Text("1"); // Por defecto, la distancia es 1, se puede cambiar
         grid.getChildren().addAll(line, distanceText);
         enlaces.add(line);

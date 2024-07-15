@@ -5,6 +5,7 @@
 package modulo;
 
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 
 /**
  *
@@ -14,13 +15,15 @@ public class Nodo {
     private int fila;
     private int columna;
     private Label label;
+    private StackPane stackPane;
     private boolean creado = false;
     private String nombre;
 
-    public Nodo(int fila, int columna, Label label) {
+    public Nodo(int fila, int columna, Label label, StackPane stackPane) {
         this.fila = fila;
         this.columna = columna;
         this.label = label;
+        this.stackPane = stackPane;
     }
 
     public boolean isCreated() {
@@ -33,6 +36,7 @@ public class Nodo {
     }
 
     public void borrarNodo() {
+        this.nombre = null;
         creado = false;
     }
 
@@ -50,5 +54,9 @@ public class Nodo {
 
     public Label getLabel() {
         return label;
+    }
+
+    public StackPane getStackPane() {
+        return stackPane;
     }
 }
