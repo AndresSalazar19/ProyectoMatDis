@@ -12,7 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
+import modulo.*;
 /**
  *
  * @author asala
@@ -84,5 +84,7 @@ public class MainViewController {
     @FXML 
     private void runFloydWarshall() {
         System.out.println("corriendo");
+        BluetoothCommunication.establecerConexion();
+
     }
 }
