@@ -6,8 +6,13 @@ package com.mycompany.algoritmo.floyd.warshall;
 import com.fazecast.jSerialComm.SerialPort;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,6 +35,7 @@ import modulo.RowData;
  * @author asala
  */
 public class mainViewController implements Initializable{
+    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     @FXML
     private Line e1Line;
@@ -124,21 +130,52 @@ public class mainViewController implements Initializable{
     @FXML
     private Button ledOffButton;
 
-    @FXML
-    private void connectToBluetooth() {
-        String portName = "COM5"; 
+    private Map<String, String> estadoAnterior = new HashMap<>();
 
-        serialPort = SerialPort.getCommPort(portName);
-        serialPort.setComPortParameters(9600, 8, 1, 0);
-        serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
+@FXML
+private void connectToBluetooth() {
+    String portName = "COM5"; // Cambia esto por el puerto COM que anotaste
 
-        if (serialPort.openPort()) {
-            System.out.println("Conexión exitosa al módulo Bluetooth en " + portName);
-            new Thread(this::readSerial).start(); // Iniciar el hilo para leer datos
-        } else {
-            System.out.println("Error al conectar con el módulo Bluetooth en " + portName);
-        }
+    serialPort = SerialPort.getCommPort(portName);
+    serialPort.setComPortParameters(9600, 8, 1, 0);
+    serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
+
+    if (serialPort.openPort()) {
+        System.out.println("Conexión exitosa al módulo Bluetooth en " + portName);
+        
+        // Crear y arrancar un hilo que actúe como un loop constante
+        Thread serialThread = new Thread(() -> {
+            try {
+                InputStream in = serialPort.getInputStream();
+                Scanner scanner = new Scanner(in);
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine().trim();
+                    Platform.runLater(() -> {
+                        procesarComando(line); // Procesar los comandos inmediatamente
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        serialThread.setDaemon(true); // Permite que el hilo se detenga cuando se cierra la aplicación
+        serialThread.start(); // Inicia el hilo
+
+        // Programar la ejecución periódica de detectarCambioEstado
+        scheduler.scheduleAtFixedRate(() -> Platform.runLater(this::verificarEstados), 0, 1, TimeUnit.SECONDS);
+        
+    } else {
+        System.out.println("Error al conectar con el módulo Bluetooth en " + portName);
     }
+}
+
+    private void verificarEstados() {
+        readSerial();
+    }
+
+
+    
 
     @FXML
     private void readSerial() {
@@ -147,8 +184,8 @@ public class mainViewController implements Initializable{
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             Platform.runLater(() -> {
-                procesarComando(line); // Procesar el comando recibido
                 System.out.println("Mensaje recibido: " + line);
+                procesarComando(line);
             });
         }
     }
@@ -263,6 +300,7 @@ public class mainViewController implements Initializable{
             serialPort.closePort();
             System.out.println("Desconectado del módulo Bluetooth");
         }
+            scheduler.shutdownNow(); // Detener el scheduler
     }
 
     @FXML
