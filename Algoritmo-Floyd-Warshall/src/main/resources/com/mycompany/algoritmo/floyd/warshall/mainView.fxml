@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
@@ -16,33 +17,17 @@
         <URL value="@/styles/mainView.css" />
         </stylesheets>
    <children>
-      <Button fx:id="connectButton" layoutX="793.0" layoutY="90.0" mnemonicParsing="false" onAction="#connectToBluetooth" text="Conectar" />
-      <Button layoutX="283.0" layoutY="699.0" mnemonicParsing="false" onAction="#hallarRutaMasCorta" text="Aplicar Floyd-Warshall" />
-      <Button layoutX="793.0" layoutY="144.0" mnemonicParsing="false" onAction="#disconnectBluetooth" text="Desconectar" />
+      <Button fx:id="connectButton" layoutX="793.0" layoutY="45.0" mnemonicParsing="false" onAction="#connectToBluetooth" text="Conectar" />
+      <Button layoutX="491.0" layoutY="233.0" mnemonicParsing="false" onAction="#hallarRutaMasCorta" text="Aplicar Floyd-Warshall" />
+      <Button layoutX="793.0" layoutY="98.0" mnemonicParsing="false" onAction="#disconnectBluetooth" text="Desconectar" />
       <Button layoutX="886.0" layoutY="322.0" mnemonicParsing="false" onAction="#sendLedOn" text="ON" />
       <Button layoutX="885.0" layoutY="436.0" mnemonicParsing="false" onAction="#sendLedOff" text="OFF" />
-      <Button layoutX="596.0" layoutY="699.0" mnemonicParsing="false" onAction="#readSerial" text="Actualizar" />
-      <Circle fill="DODGERBLUE" layoutX="136.0" layoutY="409.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="371.0" layoutY="549.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="371.0" layoutY="269.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="811.0" layoutY="269.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="591.0" layoutY="409.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
+      <Button layoutX="791.0" layoutY="233.0" mnemonicParsing="false" onAction="#readSerial" text="Actualizar" />
       <Text layoutX="473.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Algoritmo -Floyd-Warshall" wrappingWidth="383.09765625" />
-      <Circle fill="DODGERBLUE" layoutX="811.0" layoutY="549.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
-      <Line fx:id="e1Line" endX="146.0" endY="1.0" layoutX="194.0" layoutY="289.0" startX="-26.0" startY="97.0" />
-      <Line fx:id="e7Line" endX="129.0" endY="238.0" layoutX="204.0" layoutY="299.0" startX="-45.0" startY="139.0" />
-      <Line fx:id="e5Line" endX="162.0" endY="4.0" layoutX="611.0" layoutY="279.0" startX="8.0" startY="106.0" />
-      <Line fx:id="e6Line" endX="145.0" endY="9.0" layoutX="665.0" layoutY="299.0" startX="145.0" startY="211.0" />
-      <Line fx:id="e8Line" endX="151.0" endY="1.0" layoutX="404.0" layoutY="425.0" startX="-1.0" startY="101.0" />
-      <Line fx:id="e4Line" endX="-28.0" endY="87.0" layoutX="589.0" layoutY="299.0" startX="-184.0" startY="-10.0" />
-      <Line fx:id="e9Line" endX="-25.0" endY="84.0" layoutX="804.0" layoutY="446.0" startX="-178.0" startY="-24.0" />
-      <Line fx:id="e3Line" endX="145.0" endY="9.0" layoutX="227.0" layoutY="299.0" startX="145.0" startY="211.0" />
-      <Line fx:id="e2Line" endX="256.0" endY="2.0" layoutX="517.0" layoutY="269.0" startX="-106.0" />
-      <Line fx:id="e10Line" endX="256.0" endY="2.0" layoutX="517.0" layoutY="548.0" startX="-106.0" />
-      <TextField fx:id="origenTF" layoutX="106.0" layoutY="633.0" />
-      <TextField fx:id="destinoTF" layoutX="361.0" layoutY="633.0" />
-      <Label layoutX="53.0" layoutY="629.0" text="Desde:" />
-      <Label layoutX="283.0" layoutY="629.0" text="Hasta: " />
+      <TextField fx:id="origenTF" layoutX="531.0" layoutY="163.0" />
+      <TextField fx:id="destinoTF" layoutX="783.0" layoutY="163.0" />
+      <Label layoutX="473.0" layoutY="167.0" text="Desde:" />
+      <Label layoutX="728.0" layoutY="167.0" text="Hasta: " />
 <TableView fx:id="adjacencyMatrixTable" layoutX="32.0" layoutY="30.0" prefHeight="290.0" prefWidth="425.0">
     <columns>
         <TableColumn fx:id="rowIndexColumn" text="" />
@@ -54,17 +39,43 @@
         <TableColumn fx:id="col6" text="6" />
     </columns>
 </TableView>
-
-    <Button layoutX="211.0" layoutY="310.0" mnemonicParsing="false" onAction="#e1" styleClass="small-button" text="e1" />
-    <Button layoutX="582.0" layoutY="230.0" mnemonicParsing="false" onAction="#e2" styleClass="small-button" text="e2" />
-    <Button layoutX="326.0" layoutY="388.0" mnemonicParsing="false" onAction="#e3" styleClass="small-button" text="e3" />
-    <Button layoutX="485.0" layoutY="310.0" mnemonicParsing="false" onAction="#e4" styleClass="small-button" text="e4" />
-    <Button layoutX="650.0" layoutY="310.0" mnemonicParsing="false" onAction="#e5" styleClass="small-button" text="e5" />
-    <Button layoutX="820.0" layoutY="397.0" mnemonicParsing="false" onAction="#e6" styleClass="small-button" text="e6" />
-    <Button layoutX="203.0" layoutY="498.0" mnemonicParsing="false" onAction="#e7" styleClass="small-button" text="e7" />
-    <Button layoutX="485.0" layoutY="475.0" mnemonicParsing="false" onAction="#e8" styleClass="small-button" text="e8" />
-    <Button layoutX="665.0" layoutY="475.0" mnemonicParsing="false" onAction="#e9" styleClass="small-button" text="e9" />
-    <Button layoutX="582.0" layoutY="563.0" mnemonicParsing="false" onAction="#e10" styleClass="small-button" text="e10" />
+      <Pane layoutX="97.0" layoutY="320.0" prefHeight="453.0" prefWidth="807.0">
+         <children>
+            <Line fx:id="e1Line" endX="146.0" endY="1.0" layoutX="111.0" layoutY="107.0" startX="-26.0" startY="97.0" />
+            <Line fx:id="e7Line" endX="129.0" endY="238.0" layoutX="121.0" layoutY="117.0" startX="-45.0" startY="139.0" />
+            <Line fx:id="e5Line" endX="162.0" endY="4.0" layoutX="528.0" layoutY="97.0" startX="8.0" startY="106.0" />
+            <Line fx:id="e6Line" endX="145.0" endY="9.0" layoutX="582.0" layoutY="117.0" startX="145.0" startY="211.0" />
+            <Line fx:id="e8Line" endX="151.0" endY="1.0" layoutX="321.0" layoutY="243.0" startX="-1.0" startY="101.0" />
+            <Line fx:id="e4Line" endX="-28.0" endY="87.0" layoutX="506.0" layoutY="117.0" startX="-184.0" startY="-10.0" />
+            <Line fx:id="e9Line" endX="-25.0" endY="84.0" layoutX="721.0" layoutY="264.0" startX="-178.0" startY="-24.0" />
+            <Line fx:id="e3Line" endX="145.0" endY="9.0" layoutX="144.0" layoutY="117.0" startX="145.0" startY="211.0" />
+            <Line fx:id="e2Line" endX="256.0" endY="2.0" layoutX="434.0" layoutY="87.0" startX="-106.0" />
+            <Line fx:id="e10Line" endX="256.0" endY="2.0" layoutX="434.0" layoutY="366.0" startX="-106.0" />
+            <Circle fill="DODGERBLUE" layoutX="53.0" layoutY="227.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="DODGERBLUE" layoutX="288.0" layoutY="367.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="DODGERBLUE" layoutX="288.0" layoutY="87.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="DODGERBLUE" layoutX="728.0" layoutY="87.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="DODGERBLUE" layoutX="508.0" layoutY="227.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="DODGERBLUE" layoutX="728.0" layoutY="367.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
+      
+            <Button layoutX="128.0" layoutY="128.0" mnemonicParsing="false" onAction="#e1" styleClass="small-button" text="e1" />
+            <Button layoutX="499.0" layoutY="48.0" mnemonicParsing="false" onAction="#e2" styleClass="small-button" text="e2" />
+            <Button layoutX="243.0" layoutY="206.0" mnemonicParsing="false" onAction="#e3" styleClass="small-button" text="e3" />
+            <Button layoutX="402.0" layoutY="128.0" mnemonicParsing="false" onAction="#e4" styleClass="small-button" text="e4" />
+            <Button layoutX="567.0" layoutY="128.0" mnemonicParsing="false" onAction="#e5" styleClass="small-button" text="e5" />
+            <Button layoutX="737.0" layoutY="215.0" mnemonicParsing="false" onAction="#e6" styleClass="small-button" text="e6" />
+            <Button layoutX="120.0" layoutY="316.0" mnemonicParsing="false" onAction="#e7" styleClass="small-button" text="e7" />
+            <Button layoutX="402.0" layoutY="293.0" mnemonicParsing="false" onAction="#e8" styleClass="small-button" text="e8" />
+            <Button layoutX="582.0" layoutY="293.0" mnemonicParsing="false" onAction="#e9" styleClass="small-button" text="e9" />
+            <Button layoutX="499.0" layoutY="381.0" mnemonicParsing="false" onAction="#e10" styleClass="small-button" text="e10" />
+            <Text layoutX="42.0" layoutY="236.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" />
+            <Text layoutX="285.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" />
+            <Text layoutX="282.0" layoutY="373.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3" />
+            <Text layoutX="505.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" />
+            <Text layoutX="725.0" layoutY="372.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5" />
+            <Text layoutX="725.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="6" />
+         </children>
+      </Pane>
 
    </children>
 </AnchorPane>

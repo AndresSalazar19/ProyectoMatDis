@@ -11,12 +11,12 @@ package modulo;
 
 public class FloydWarshall {
     final static int INF = Integer.MAX_VALUE;
-    
+
     public int[][] floydWarshall(int[][] graph) {
         int n = graph.length;
         int[][] dist = new int[n][n];
         int[][] next = new int[n][n];
-        
+
         // Inicializar la matriz de distancias y la matriz de rutas
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -28,7 +28,7 @@ public class FloydWarshall {
                 }
             }
         }
-        
+
         // Algoritmo de Floyd-Warshall
         for (int k = 0; k < n; k++) {
             for (int i = 0; i < n; i++) {
@@ -40,17 +40,18 @@ public class FloydWarshall {
                 }
             }
         }
-        
+
+        // Imprimir la matriz de distancias
+        printSolution(dist);
         return next;
     }
 
-    
     public void printPath(int i, int j, int[][] next) {
         if (next[i][j] == -1) {
             System.out.println("No existe un camino desde " + (i + 1) + " a " + (j + 1));
             return;
         }
-        
+
         System.out.print((i + 1));
         while (i != j) {
             i = next[i][j];
@@ -58,7 +59,6 @@ public class FloydWarshall {
         }
         System.out.println();
     }
-
 
     public void printSolution(int[][] dist) {
         int n = dist.length;
@@ -74,3 +74,4 @@ public class FloydWarshall {
         }
     }
 }
+

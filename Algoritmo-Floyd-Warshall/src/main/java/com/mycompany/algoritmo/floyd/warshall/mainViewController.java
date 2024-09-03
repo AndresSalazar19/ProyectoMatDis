@@ -77,11 +77,11 @@ public class mainViewController implements Initializable{
     
     int[][] grafo = {
         {0, 700, 200, INF, INF, INF}, // Nodo 1
-        {700, 0, 300, 400, INF, INF}, // Nodo 2
-        {200, 300, 0, 700, INF, INF}, // Nodo 3
-        {INF, 400, 700, 0, 300, 100}, // Nodo 4
-        {INF, INF, INF, 300, 0, 500}, // Nodo 5
-        {INF, INF, INF, 100, 500, 0}  // Nodo 6
+        {700, 0, 300, 200, INF, 400}, // Nodo 2
+        {200, 300, 0, 700, 600, INF}, // Nodo 3
+        {INF, 200, 700, 0, 300, 100}, // Nodo 4
+        {INF, INF, 600, 300, 0, 500}, // Nodo 5
+        {INF, 400, INF, 100, 500, 0}  // Nodo 6
     };
         
     private SerialPort serialPort;
@@ -169,7 +169,8 @@ public class mainViewController implements Initializable{
             FloydWarshall fw = new FloydWarshall();
             // Ejecutar el algoritmo de Floyd-Warshall
             int[][] next = fw.floydWarshall(grafo);
-
+            fw.printSolution(next);
+            System.out.println("aass");
             // Mostrar la ruta en la consola o en un componente gráfico
             fw.printPath(origen, destino, next);
 
@@ -196,57 +197,73 @@ public class mainViewController implements Initializable{
     
     @FXML
     private void e1() {
+        eliminarArista(0, 1);
         e1Line.setVisible(false);
     }
 
     @FXML
     private void e2() {
-        System.out.println("AAA");
+        eliminarArista(1, 5);
         e2Line.setVisible(false);
     }
 
     @FXML
     private void e3() {
-        System.out.println("AAA");
+        System.out.println("e3");
+        eliminarArista(1, 2);
         e3Line.setVisible(false);
     }
 
     @FXML
     private void e4() {
-        System.out.println("AAA");
+        eliminarArista(1, 3);
         e4Line.setVisible(false);
-    }    @FXML
+    }
+
+    @FXML
     private void e5() {
-        System.out.println("AAA");
+        eliminarArista(3, 5);
         e5Line.setVisible(false);
     }
 
     @FXML
     private void e6() {
-        System.out.println("AAA");
+        eliminarArista(4, 5);
         e6Line.setVisible(false);
-    }    @FXML
+    }
+
+    @FXML
     private void e7() {
-        System.out.println("AAA");
+        eliminarArista(0, 2);
         e7Line.setVisible(false);
     }
 
     @FXML
     private void e8() {
-        System.out.println("AAA");
+        eliminarArista(2, 3);
         e8Line.setVisible(false);
-    }    @FXML
+    }
+
+    @FXML
     private void e9() {
-        System.out.println("AAA");
+        eliminarArista(3, 4);
         e9Line.setVisible(false);
     }
 
     @FXML
     private void e10() {
-        System.out.println("AAA");
+        eliminarArista(2, 4);
         e10Line.setVisible(false);
     }
 
+    private void eliminarArista(int nodo1, int nodo2) {
+        grafo[nodo1][nodo2] = INF; // Eliminar la arista en la matriz de adyacencia
+        grafo[nodo2][nodo1] = INF; // Dado que es un grafo no dirigido, eliminamos ambas direcciones
+        actualizarTabla();         // Actualizar la tabla para reflejar los cambios en la matriz
+    }
+    
+
+        
     private void actualizarTabla() {
         ObservableList<RowData> data = FXCollections.observableArrayList();
 
