@@ -8,29 +8,69 @@ package modulo;
  *
  * @author asala
  */
+
 public class FloydWarshall {
-    private static final int INF = 99999;
-
-    public static int[][] floydWarshall(int[][] graph, int V) {
-        int dist[][] = new int[V][V];
-        int i, j, k;
-
-        for (i = 0; i < V; i++) {
-            for (j = 0; j < V; j++) {
+    final static int INF = Integer.MAX_VALUE;
+    
+    public int[][] floydWarshall(int[][] graph) {
+        int n = graph.length;
+        int[][] dist = new int[n][n];
+        int[][] next = new int[n][n];
+        
+        // Inicializar la matriz de distancias y la matriz de rutas
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
                 dist[i][j] = graph[i][j];
+                if (graph[i][j] != INF && i != j) {
+                    next[i][j] = j;
+                } else {
+                    next[i][j] = -1;
+                }
             }
         }
-
-        for (k = 0; k < V; k++) {
-            for (i = 0; i < V; i++) {
-                for (j = 0; j < V; j++) {
-                    if (dist[i][k] + dist[k][j] < dist[i][j]) {
+        
+        // Algoritmo de Floyd-Warshall
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (dist[i][k] != INF && dist[k][j] != INF && dist[i][k] + dist[k][j] < dist[i][j]) {
                         dist[i][j] = dist[i][k] + dist[k][j];
+                        next[i][j] = next[i][k];
                     }
                 }
             }
         }
+        
+        return next;
+    }
 
-        return dist;
+    
+    public void printPath(int i, int j, int[][] next) {
+        if (next[i][j] == -1) {
+            System.out.println("No existe un camino desde " + (i + 1) + " a " + (j + 1));
+            return;
+        }
+        
+        System.out.print((i + 1));
+        while (i != j) {
+            i = next[i][j];
+            System.out.print(" -> " + (i + 1));
+        }
+        System.out.println();
+    }
+
+
+    public void printSolution(int[][] dist) {
+        int n = dist.length;
+        System.out.println("Matriz de distancias más cortas entre cada par de nodos:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dist[i][j] == INF)
+                    System.out.print("INF ");
+                else
+                    System.out.print(dist[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }

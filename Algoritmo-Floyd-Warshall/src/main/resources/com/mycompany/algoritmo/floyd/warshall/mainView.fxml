@@ -1,17 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" prefHeight="800.0" prefWidth="1000.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.algoritmo.floyd.warshall.MainViewController">
-  <Label text="Floyd-Warshall Path Finder" />
-    <Label text="Filas:" />
-    <TextField fx:id="filasField" prefHeight="25.0" prefWidth="356.0" />
-    <Label text="Columnas:" />
-    <TextField fx:id="columnasField" />
-    <Button onAction="#createGrid" text="Crear Grid" />
-    <Button onAction="#runFloydWarshall" text="Floyd-Warshall" />
-   <Button mnemonicParsing="false" onAction="#startLinking" text="Modo enlace" />
-</VBox>
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.algoritmo.floyd.warshall.mainViewController">
+        <stylesheets>
+        <URL value="@/styles/mainView.css" />
+        </stylesheets>
+   <children>
+      <Button fx:id="connectButton" layoutX="793.0" layoutY="90.0" mnemonicParsing="false" onAction="#connectToBluetooth" text="Conectar" />
+      <Button layoutX="283.0" layoutY="699.0" mnemonicParsing="false" onAction="#hallarRutaMasCorta" text="Aplicar Floyd-Warshall" />
+      <Button layoutX="793.0" layoutY="144.0" mnemonicParsing="false" onAction="#disconnectBluetooth" text="Desconectar" />
+      <Button layoutX="886.0" layoutY="322.0" mnemonicParsing="false" onAction="#sendLedOn" text="ON" />
+      <Button layoutX="885.0" layoutY="436.0" mnemonicParsing="false" onAction="#sendLedOff" text="OFF" />
+      <Button layoutX="596.0" layoutY="699.0" mnemonicParsing="false" onAction="#readSerial" text="Actualizar" />
+      <Circle fill="DODGERBLUE" layoutX="136.0" layoutY="409.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="DODGERBLUE" layoutX="371.0" layoutY="549.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="DODGERBLUE" layoutX="371.0" layoutY="269.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="DODGERBLUE" layoutX="811.0" layoutY="269.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="DODGERBLUE" layoutX="591.0" layoutY="409.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text layoutX="308.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Algoritmo -Floyd-Warshall" wrappingWidth="383.09765625" />
+      <Circle fill="DODGERBLUE" layoutX="811.0" layoutY="549.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
+      <Line endX="146.0" endY="1.0" layoutX="194.0" layoutY="289.0" startX="-26.0" startY="97.0" />
+      <Line endX="129.0" endY="238.0" layoutX="204.0" layoutY="299.0" startX="-45.0" startY="139.0" />
+      <Line endX="162.0" endY="4.0" layoutX="611.0" layoutY="279.0" startX="8.0" startY="106.0" />
+      <Line endX="145.0" endY="9.0" layoutX="665.0" layoutY="299.0" startX="145.0" startY="211.0" />
+      <Line endX="151.0" endY="1.0" layoutX="404.0" layoutY="425.0" startX="-1.0" startY="101.0" />
+      <Line endX="-28.0" endY="87.0" layoutX="589.0" layoutY="299.0" startX="-184.0" startY="-10.0" />
+      <Line endX="-25.0" endY="84.0" layoutX="804.0" layoutY="446.0" startX="-178.0" startY="-24.0" />
+      <Line endX="145.0" endY="9.0" layoutX="227.0" layoutY="299.0" startX="145.0" startY="211.0" />
+      <Line endX="256.0" endY="2.0" layoutX="517.0" layoutY="269.0" startX="-106.0" />
+      <Line endX="256.0" endY="2.0" layoutX="517.0" layoutY="548.0" startX="-106.0" />
+      <TextField fx:id="origenTF" layoutX="106.0" layoutY="633.0" />
+      <TextField fx:id="destinoTF" layoutX="361.0" layoutY="633.0" />
+      <Label layoutX="53.0" layoutY="629.0" text="De:" />
+      <Label layoutX="283.0" layoutY="629.0" text="Hasta: " />
+    <TableView fx:id="adjacencyMatrixTable" layoutX="50.0" layoutY="300.0" prefWidth="600.0" prefHeight="200.0">
+        <columns>
+            <TableColumn fx:id="col1" text="1" />
+            <TableColumn fx:id="col2" text="2" />
+            <TableColumn fx:id="col3" text="3" />
+            <TableColumn fx:id="col4" text="4" />
+            <TableColumn fx:id="col5" text="5" />
+            <TableColumn fx:id="col6" text="6" />
+        </columns>
+    </TableView>
+   </children>
+</AnchorPane>

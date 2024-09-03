@@ -1,0 +1,62 @@
+/* mainView.css */
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 10px #719ECE;
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px #719ECE;
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px #719ECE;
+    }
+}
+
+.button {
+    -fx-background-color: #6A8D92;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 0, 0);
+}
+
+.button:hover {
+    -fx-background-color: #547A7B;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 15, 0.5, 0, 0);
+}
+
+.button:pressed {
+    -fx-background-color: #3B5455;
+}
+
+.circle {
+    -fx-fill: #72B4BF;
+    -fx-stroke: #344A51;
+    -fx-stroke-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 0, 0);
+    -fx-animation: pulse 2s infinite;
+}
+
+.circle:hover {
+    -fx-fill: #507E86;
+}
+
+.text {
+    -fx-font-size: 24px;
+    -fx-fill: #344A51;
+    -fx-font-weight: bold;
+}
+
+.line {
+    -fx-stroke: #D96C75;
+    -fx-stroke-width: 3;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0.5, 0, 0);
+}
+
+.anchor-pane {
+    -fx-background-color: linear-gradient(to bottom right, #F5F7FA, #DDE5ED);
+}
