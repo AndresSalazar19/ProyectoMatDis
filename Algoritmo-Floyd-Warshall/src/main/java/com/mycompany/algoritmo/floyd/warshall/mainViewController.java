@@ -16,9 +16,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.shape.Line;
 import modulo.FloydWarshall;
 import modulo.RowData;
@@ -55,7 +57,36 @@ public class mainViewController implements Initializable{
 
     @FXML
     private TextField destinoTF;
+    
+    @FXML
+    private Label p1Label;
+    
+    @FXML
+    private Label p2Label;
+        
+    @FXML
+    private Label p3Label;
+    @FXML
+    private Label p4Label;
 
+    @FXML
+    private Label p5Label;
+
+    @FXML
+    private Label p6Label;
+
+    @FXML
+    private Label p7Label;
+
+    @FXML
+    private Label p8Label;
+
+    @FXML
+    private Label p9Label;
+
+    @FXML
+    private Label p10Label;
+    
     @FXML
     private TableView<RowData> adjacencyMatrixTable;
     @FXML
@@ -116,11 +147,95 @@ public class mainViewController implements Initializable{
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             Platform.runLater(() -> {
+                procesarComando(line); // Procesar el comando recibido
                 System.out.println("Mensaje recibido: " + line);
             });
         }
     }
 
+    private void procesarComando(String comando) {
+        if (comando.startsWith("e") && comando.length() >= 4) {
+            int arista = Character.getNumericValue(comando.charAt(1));
+            String estado = comando.substring(2).toUpperCase();
+
+            switch (arista) {
+                case 1:
+                    if (estado.equals("ON")) {
+                        e1(); // Llama al método e1
+                    } else {
+                        eliminarArista(0, 1);
+                    }
+                    break;
+                case 2:
+                    if (estado.equals("ON")) {
+                        e2();
+                    } else {
+                        eliminarArista(1, 5);
+                    }
+                    break;
+                case 3:
+                    if (estado.equals("ON")) {
+                        e3();
+                    } else {
+                        eliminarArista(1, 2);
+                    }
+                    break;
+                case 4:
+                    if (estado.equals("ON")) {
+                        e4();
+                    } else {
+                        eliminarArista(1, 3);
+                    }
+                    break;
+                case 5:
+                    if (estado.equals("ON")) {
+                        e5();
+                    } else {
+                        eliminarArista(3, 5);
+                    }
+                    break;
+                case 6:
+                    if (estado.equals("ON")) {
+                        e6();
+                    } else {
+                        eliminarArista(4, 5);
+                    }
+                    break;
+                case 7:
+                    if (estado.equals("ON")) {
+                        e7();
+                    } else {
+                        eliminarArista(0, 2);
+                    }
+                    break;
+                case 8:
+                    if (estado.equals("ON")) {
+                        e8();
+                    } else {
+                        eliminarArista(2, 3);
+                    }
+                    break;
+                case 9:
+                    if (estado.equals("ON")) {
+                        e9();
+                    } else {
+                        eliminarArista(3, 4);
+                    }
+                    break;
+                case 10:
+                    if (estado.equals("ON")) {
+                        e10();
+                    } else {
+                        eliminarArista(2, 4);
+                    }
+                    break;
+                default:
+                    System.out.println("Comando no reconocido: " + comando);
+            }
+        } else {
+            System.out.println("Comando no válido: " + comando);
+        }
+    }
 
     @FXML
     private void sendLedOn() {
@@ -187,9 +302,7 @@ public class mainViewController implements Initializable{
         alert.showAndWait();
     }
     
-    public void eliminarArista1(){
-    
-    }
+
     
     public void insertarArista1(int peso){
         
@@ -197,63 +310,307 @@ public class mainViewController implements Initializable{
     
     @FXML
     private void e1() {
-        eliminarArista(0, 1);
-        e1Line.setVisible(false);
+        if (grafo[0][1] == INF) { // Nodo 1 y Nodo 2
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Insertar Arista");
+            dialog.setHeaderText("Ingrese el peso de la arista e1: ");
+            dialog.setContentText("Peso:");
+
+            dialog.showAndWait().ifPresent(response -> {
+                try {
+                    int peso = Integer.parseInt(response);
+                    if (peso > 0 && peso < 10000) {
+                        insertarArista(0, 1, peso);
+                        e1Line.setVisible(true);
+                        p1Label.setText(String.valueOf(peso));
+                        p1Label.setVisible(true);
+                    } else {
+                        mostrarAdvertencia("Advertencia", "El peso debe ser mayor que 0 y menor que 10,000.");
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarAlerta("Error", "Debe ingresar un número válido para el peso.");
+                }
+            });
+        } else {
+            eliminarArista(0, 1);
+            e1Line.setVisible(false);
+            p1Label.setVisible(false);
+        }
     }
 
     @FXML
     private void e2() {
-        eliminarArista(1, 5);
-        e2Line.setVisible(false);
+        if (grafo[1][5] == INF) { // Nodo 2 y Nodo 6
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Insertar Arista");
+            dialog.setHeaderText("Ingrese el peso de la arista e2: ");
+            dialog.setContentText("Peso:");
+
+            dialog.showAndWait().ifPresent(response -> {
+                try {
+                    int peso = Integer.parseInt(response);
+                    if (peso > 0 && peso < 10000) {
+                        insertarArista(1, 5, peso);
+                        e2Line.setVisible(true);
+                        p2Label.setText(String.valueOf(peso));
+                        p2Label.setVisible(true);
+                    } else {
+                        mostrarAdvertencia("Advertencia", "El peso debe ser mayor que 0 y menor que 10,000.");
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarAlerta("Error", "Debe ingresar un número válido para el peso.");
+                }
+            });
+        } else {
+            eliminarArista(1, 5);
+            e2Line.setVisible(false);
+            p2Label.setVisible(false);
+        }
     }
 
     @FXML
     private void e3() {
-        System.out.println("e3");
-        eliminarArista(1, 2);
-        e3Line.setVisible(false);
+        if (grafo[1][2] == INF) {
+            // Crear el diálogo de entrada de texto para ingresar el peso
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Insertar Arista");
+            dialog.setHeaderText("Ingrese el peso de la arista e3: ");
+            dialog.setContentText("Peso:");
+
+            // Mostrar el diálogo y esperar la respuesta del usuario
+            dialog.showAndWait().ifPresent(response -> {
+                try {
+                    int peso = Integer.parseInt(response);
+
+                    // Validar que el peso sea mayor que 0 y menor que 10000
+                    if (peso > 0 && peso < 10000) {
+                        insertarArista(1, 2, peso); // Insertar la arista con el peso proporcionado
+                        e3Line.setVisible(true);
+                        p3Label.setText(String.valueOf(peso));
+                        p3Label.setVisible(true);
+                    } else {
+                        mostrarAdvertencia("Advertencia", "El peso debe ser mayor que 0 y menor que 10,000.");
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarAlerta("Error", "Debe ingresar un número válido para el peso.");
+                }
+            });
+        } else {
+            eliminarArista(1, 2);
+            e3Line.setVisible(false);
+            p3Label.setVisible(false);
+        }
     }
 
     @FXML
     private void e4() {
-        eliminarArista(1, 3);
-        e4Line.setVisible(false);
+        if (grafo[1][3] == INF) { // Nodo 2 y Nodo 4
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Insertar Arista");
+            dialog.setHeaderText("Ingrese el peso de la arista e4: ");
+            dialog.setContentText("Peso:");
+
+            dialog.showAndWait().ifPresent(response -> {
+                try {
+                    int peso = Integer.parseInt(response);
+                    if (peso > 0 && peso < 10000) {
+                        insertarArista(1, 3, peso);
+                        e4Line.setVisible(true);
+                        p4Label.setText(String.valueOf(peso));
+                        p4Label.setVisible(true);
+                    } else {
+                        mostrarAdvertencia("Advertencia", "El peso debe ser mayor que 0 y menor que 10,000.");
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarAlerta("Error", "Debe ingresar un número válido para el peso.");
+                }
+            });
+        } else {
+            eliminarArista(1, 3);
+            e4Line.setVisible(false);
+            p4Label.setVisible(false);
+        }
     }
+
 
     @FXML
     private void e5() {
-        eliminarArista(3, 5);
-        e5Line.setVisible(false);
+        if (grafo[3][5] == INF) { // Nodo 4 y Nodo 6
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Insertar Arista");
+            dialog.setHeaderText("Ingrese el peso de la arista e5: ");
+            dialog.setContentText("Peso:");
+
+            dialog.showAndWait().ifPresent(response -> {
+                try {
+                    int peso = Integer.parseInt(response);
+                    if (peso > 0 && peso < 10000) {
+                        insertarArista(3, 5, peso);
+                        e5Line.setVisible(true);
+                        p5Label.setText(String.valueOf(peso));
+                        p5Label.setVisible(true);
+                    } else {
+                        mostrarAdvertencia("Advertencia", "El peso debe ser mayor que 0 y menor que 10,000.");
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarAlerta("Error", "Debe ingresar un número válido para el peso.");
+                }
+            });
+        } else {
+            eliminarArista(3, 5);
+            e5Line.setVisible(false);
+            p5Label.setVisible(false);
+        }
     }
 
     @FXML
     private void e6() {
-        eliminarArista(4, 5);
-        e6Line.setVisible(false);
+        if (grafo[4][5] == INF) { // Nodo 5 y Nodo 6
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Insertar Arista");
+            dialog.setHeaderText("Ingrese el peso de la arista e6: ");
+            dialog.setContentText("Peso:");
+
+            dialog.showAndWait().ifPresent(response -> {
+                try {
+                    int peso = Integer.parseInt(response);
+                    if (peso > 0 && peso < 10000) {
+                        insertarArista(4, 5, peso);
+                        e6Line.setVisible(true);
+                        p6Label.setText(String.valueOf(peso));
+                        p6Label.setVisible(true);
+                    } else {
+                        mostrarAdvertencia("Advertencia", "El peso debe ser mayor que 0 y menor que 10,000.");
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarAlerta("Error", "Debe ingresar un número válido para el peso.");
+                }
+            });
+        } else {
+            eliminarArista(4, 5);
+            e6Line.setVisible(false);
+            p6Label.setVisible(false);
+        }
     }
 
     @FXML
     private void e7() {
-        eliminarArista(0, 2);
-        e7Line.setVisible(false);
+        if (grafo[0][2] == INF) { // Nodo 1 y Nodo 3
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Insertar Arista");
+            dialog.setHeaderText("Ingrese el peso de la arista e7: ");
+            dialog.setContentText("Peso:");
+
+            dialog.showAndWait().ifPresent(response -> {
+                try {
+                    int peso = Integer.parseInt(response);
+                    if (peso > 0 && peso < 10000) {
+                        insertarArista(0, 2, peso);
+                        e7Line.setVisible(true);
+                        p7Label.setText(String.valueOf(peso));
+                        p7Label.setVisible(true);
+                    } else {
+                        mostrarAdvertencia("Advertencia", "El peso debe ser mayor que 0 y menor que 10,000.");
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarAlerta("Error", "Debe ingresar un número válido para el peso.");
+                }
+            });
+        } else {
+            eliminarArista(0, 2);
+            e7Line.setVisible(false);
+            p7Label.setVisible(false);
+        }
     }
 
     @FXML
     private void e8() {
-        eliminarArista(2, 3);
-        e8Line.setVisible(false);
+        if (grafo[2][3] == INF) { // Nodo 3 y Nodo 4
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Insertar Arista");
+            dialog.setHeaderText("Ingrese el peso de la arista e8: ");
+            dialog.setContentText("Peso:");
+
+            dialog.showAndWait().ifPresent(response -> {
+                try {
+                    int peso = Integer.parseInt(response);
+                    if (peso > 0 && peso < 10000) {
+                        insertarArista(2, 3, peso);
+                        e8Line.setVisible(true);
+                        p8Label.setText(String.valueOf(peso));
+                        p8Label.setVisible(true);
+                    } else {
+                        mostrarAdvertencia("Advertencia", "El peso debe ser mayor que 0 y menor que 10,000.");
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarAlerta("Error", "Debe ingresar un número válido para el peso.");
+                }
+            });
+        } else {
+            eliminarArista(2, 3);
+            e8Line.setVisible(false);
+            p8Label.setVisible(false);
+        }
     }
 
     @FXML
     private void e9() {
-        eliminarArista(3, 4);
-        e9Line.setVisible(false);
+        if (grafo[3][4] == INF) { // Nodo 4 y Nodo 5
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Insertar Arista");
+            dialog.setHeaderText("Ingrese el peso de la arista e9: ");
+            dialog.setContentText("Peso:");
+
+            dialog.showAndWait().ifPresent(response -> {
+                try {
+                    int peso = Integer.parseInt(response);
+                    if (peso > 0 && peso < 10000) {
+                        insertarArista(3, 4, peso);
+                        e9Line.setVisible(true);
+                        p9Label.setText(String.valueOf(peso));
+                        p9Label.setVisible(true);
+                    } else {
+                        mostrarAdvertencia("Advertencia", "El peso debe ser mayor que 0 y menor que 10,000.");
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarAlerta("Error", "Debe ingresar un número válido para el peso.");
+                }
+            });
+        } else {
+            eliminarArista(3, 4);
+            e9Line.setVisible(false);
+            p9Label.setVisible(false);
+        }
     }
 
     @FXML
     private void e10() {
-        eliminarArista(2, 4);
-        e10Line.setVisible(false);
+        if (grafo[2][4] == INF) { // Nodo 3 y Nodo 5
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Insertar Arista");
+            dialog.setHeaderText("Ingrese el peso de la arista e10: ");
+            dialog.setContentText("Peso:");
+
+            dialog.showAndWait().ifPresent(response -> {
+                try {
+                    int peso = Integer.parseInt(response);
+                    if (peso > 0 && peso < 10000) {
+                        insertarArista(2, 4, peso);
+                        e10Line.setVisible(true);
+                        p10Label.setText(String.valueOf(peso));
+                        p10Label.setVisible(true);
+                    } else {
+                        mostrarAdvertencia("Advertencia", "El peso debe ser mayor que 0 y menor que 10,000.");
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarAlerta("Error", "Debe ingresar un número válido para el peso.");
+                }
+            });
+        } else {
+            eliminarArista(2, 4);
+            e10Line.setVisible(false);
+            p10Label.setVisible(false);
+        }
     }
 
     private void eliminarArista(int nodo1, int nodo2) {
@@ -262,7 +619,11 @@ public class mainViewController implements Initializable{
         actualizarTabla();         // Actualizar la tabla para reflejar los cambios en la matriz
     }
     
-
+    private void insertarArista(int nodo1, int nodo2, int peso) {
+        grafo[nodo1][nodo2] = peso; // Insertar la arista en la matriz de adyacencia con el peso especificado
+        grafo[nodo2][nodo1] = peso; // Para un grafo no dirigido, también actualiza la otra dirección
+        actualizarTabla(); // Actualizar la tabla para reflejar los cambios
+    }
         
     private void actualizarTabla() {
         ObservableList<RowData> data = FXCollections.observableArrayList();
@@ -280,6 +641,14 @@ public class mainViewController implements Initializable{
         }
 
         adjacencyMatrixTable.setItems(data);
+    }
+    
+    private void mostrarAdvertencia(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
     
     @Override
