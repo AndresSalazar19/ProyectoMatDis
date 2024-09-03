@@ -1,19 +1,5 @@
 /* mainView.css */
 
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 10px #719ECE;
-    }
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 20px #719ECE;
-    }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 10px #719ECE;
-    }
-}
 
 .button {
     -fx-background-color: #6A8D92;
@@ -59,4 +45,12 @@
 
 .anchor-pane {
     -fx-background-color: linear-gradient(to bottom right, #F5F7FA, #DDE5ED);
+}
+
+.small-button {
+    -fx-font-size: 10px;     /* Tamaño de la fuente más pequeño */
+    -fx-padding: 5px;        /* Menos espacio alrededor del texto */
+    -fx-background-radius: 5px; /* Bordes más redondeados */
+    -fx-min-width: 40px;     /* Ancho mínimo */
+    -fx-min-height: 20px;    /* Alto mínimo */
 }

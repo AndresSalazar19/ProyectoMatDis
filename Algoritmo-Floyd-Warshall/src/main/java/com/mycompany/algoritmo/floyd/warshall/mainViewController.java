@@ -9,13 +9,17 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.shape.Line;
 import modulo.FloydWarshall;
 import modulo.RowData;
 
@@ -26,6 +30,27 @@ import modulo.RowData;
 public class mainViewController implements Initializable{
 
     @FXML
+    private Line e1Line;
+    @FXML
+    private Line e2Line;    
+    @FXML
+    private Line e3Line;
+    @FXML
+    private Line e4Line;    
+    @FXML
+    private Line e5Line;
+    @FXML
+    private Line e6Line;    
+    @FXML
+    private Line e7Line;
+    @FXML
+    private Line e8Line;      
+    @FXML
+    private Line e9Line;
+    @FXML
+    private Line e10Line;      
+    
+    @FXML
     private TextField origenTF;
 
     @FXML
@@ -33,6 +58,20 @@ public class mainViewController implements Initializable{
 
     @FXML
     private TableView<RowData> adjacencyMatrixTable;
+    @FXML
+    private TableColumn<RowData, String> rowIndexColumn;
+    @FXML
+    private TableColumn<RowData, String> col1;
+    @FXML
+    private TableColumn<RowData, String> col2;
+    @FXML
+    private TableColumn<RowData, String> col3;
+    @FXML
+    private TableColumn<RowData, String> col4;
+    @FXML
+    private TableColumn<RowData, String> col5;
+    @FXML
+    private TableColumn<RowData, String> col6;
     
     final static int INF = Integer.MAX_VALUE;   
     
@@ -155,9 +194,89 @@ public class mainViewController implements Initializable{
         
     }
     
+    @FXML
+    private void e1() {
+        e1Line.setVisible(false);
+    }
+
+    @FXML
+    private void e2() {
+        System.out.println("AAA");
+        e2Line.setVisible(false);
+    }
+
+    @FXML
+    private void e3() {
+        System.out.println("AAA");
+        e3Line.setVisible(false);
+    }
+
+    @FXML
+    private void e4() {
+        System.out.println("AAA");
+        e4Line.setVisible(false);
+    }    @FXML
+    private void e5() {
+        System.out.println("AAA");
+        e5Line.setVisible(false);
+    }
+
+    @FXML
+    private void e6() {
+        System.out.println("AAA");
+        e6Line.setVisible(false);
+    }    @FXML
+    private void e7() {
+        System.out.println("AAA");
+        e7Line.setVisible(false);
+    }
+
+    @FXML
+    private void e8() {
+        System.out.println("AAA");
+        e8Line.setVisible(false);
+    }    @FXML
+    private void e9() {
+        System.out.println("AAA");
+        e9Line.setVisible(false);
+    }
+
+    @FXML
+    private void e10() {
+        System.out.println("AAA");
+        e10Line.setVisible(false);
+    }
+
+    private void actualizarTabla() {
+        ObservableList<RowData> data = FXCollections.observableArrayList();
+
+        for (int i = 0; i < grafo.length; i++) {
+            data.add(new RowData(
+                String.valueOf(i + 1), // Índice de la fila
+                grafo[i][0] == INF ? "INF" : String.valueOf(grafo[i][0]),
+                grafo[i][1] == INF ? "INF" : String.valueOf(grafo[i][1]),
+                grafo[i][2] == INF ? "INF" : String.valueOf(grafo[i][2]),
+                grafo[i][3] == INF ? "INF" : String.valueOf(grafo[i][3]),
+                grafo[i][4] == INF ? "INF" : String.valueOf(grafo[i][4]),
+                grafo[i][5] == INF ? "INF" : String.valueOf(grafo[i][5])
+            ));
+        }
+
+        adjacencyMatrixTable.setItems(data);
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        // Configurar las columnas de la tabla con las propiedades del RowData
+        rowIndexColumn.setCellValueFactory(cellData -> cellData.getValue().rowIndexProperty());
+        col1.setCellValueFactory(cellData -> cellData.getValue().col1Property());
+        col2.setCellValueFactory(cellData -> cellData.getValue().col2Property());
+        col3.setCellValueFactory(cellData -> cellData.getValue().col3Property());
+        col4.setCellValueFactory(cellData -> cellData.getValue().col4Property());
+        col5.setCellValueFactory(cellData -> cellData.getValue().col5Property());
+        col6.setCellValueFactory(cellData -> cellData.getValue().col6Property());
 
+        // Llenar la tabla con la matriz de adyacencia
+        actualizarTabla();
     }
 }
