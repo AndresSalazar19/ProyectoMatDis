@@ -4,6 +4,9 @@
  */
 package modulo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author asala
@@ -46,18 +49,22 @@ public class FloydWarshall {
         return next;
     }
 
-    public void printPath(int i, int j, int[][] next) {
+    public List<Integer> printPath(int i, int j, int[][] next) {
+        List<Integer> path = new ArrayList<>();
         if (next[i][j] == -1) {
             System.out.println("No existe un camino desde " + (i + 1) + " a " + (j + 1));
-            return;
+            return path;
         }
 
         System.out.print((i + 1));
         while (i != j) {
+            path.add(i);
             i = next[i][j];
             System.out.print(" -> " + (i + 1));
         }
+        path.add(j);
         System.out.println();
+        return path;
     }
 
     public void printSolution(int[][] dist) {
@@ -72,6 +79,17 @@ public class FloydWarshall {
             }
             System.out.println();
         }
+    }
+    
+    // Método para obtener la lista de aristas a partir de la lista de nodos del camino más corto
+    public List<int[]> obtenerAristas(List<Integer> path) {
+        List<int[]> aristas = new ArrayList<>();
+        for (int k = 0; k < path.size() - 1; k++) {
+            int origen = path.get(k);
+            int destino = path.get(k + 1);
+            aristas.add(new int[]{origen, destino});  // Agregar la arista (origen, destino)
+        }
+        return aristas;
     }
 }
 

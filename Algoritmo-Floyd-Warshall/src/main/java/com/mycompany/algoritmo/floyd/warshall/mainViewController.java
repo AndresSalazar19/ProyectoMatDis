@@ -7,6 +7,7 @@ import com.fazecast.jSerialComm.SerialPort;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -26,6 +27,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import modulo.FloydWarshall;
 import modulo.RowData;
@@ -109,6 +112,21 @@ public class mainViewController implements Initializable{
     private TableColumn<RowData, String> col5;
     @FXML
     private TableColumn<RowData, String> col6;
+    
+    @FXML
+    private Circle v1;
+    @FXML
+    private Circle v2;
+    @FXML
+    private Circle v3;
+    @FXML
+    private Circle v4;
+    @FXML
+    private Circle v5;
+    @FXML
+    private Circle v6;
+    private Map<Integer, Circle> nodosCircles;
+    private Map<String, Line> aristasMap;
     
     final static int INF = Integer.MAX_VALUE;   
     
@@ -306,6 +324,7 @@ private void connectToBluetooth() {
     @FXML
     public void hallarRutaMasCorta() {
         try {
+            obtenerColorOriginal();
             int origen = Integer.parseInt(origenTF.getText());
             int destino = Integer.parseInt(destinoTF.getText());
 
@@ -325,13 +344,70 @@ private void connectToBluetooth() {
             fw.printSolution(next);
             System.out.println("aass");
             // Mostrar la ruta en la consola o en un componente gráfico
-            fw.printPath(origen, destino, next);
+            //fw.printPath(origen, destino, next);
+            // Obtener la ruta más corta
+            List<Integer> path = fw.printPath(origen, destino, next);
+
+            // Encender los LEDs correspondientes al camino
+            for (int nodo : path) {
+                sendLedOnForNode(nodo);  // Enviar comando para encender LED del nodo
+            }
+
+            // Cambiar los colores de los vértices en la interfaz JavaFX
+            highlightPath(path);
+             // Obtener la lista de aristas correspondientes al camino
+            List<int[]> aristasCamino = fw.obtenerAristas(path);
+
+            // Cambiar el color de las aristas que forman parte del camino
+            highlightEdges(aristasCamino);
 
         } catch (NumberFormatException e) {
             mostrarAlerta("Error de entrada", "Por favor, ingrese números válidos.");
         }
     }
  
+    private void obtenerColorOriginal(){
+        for(int i=0; i<6;i++){
+            Circle nodoCircle = nodosCircles.get(i);  // Obtener el círculo del nodo
+            nodoCircle.setFill(Color.BLUE);  // Cambiar el color del nodo
+        }
+        for(String key: aristasMap.keySet()){
+            Line nodoLine= aristasMap.get(key);
+            nodoLine.setStroke(Color.BLACK);
+        }
+    }
+    
+    private void sendLedOnForNode(int node) {
+        String command = String.valueOf(node + 1);  // Convertir nodo a cadena para enviar el comando
+        sendCommand(command);  // Enviar comando a través de serial
+    }
+    
+    private void highlightPath(List<Integer> path) {
+        // Supongamos que tienes una lista de nodos representados por círculos o cualquier componente gráfico
+        for (int nodo : path) {
+            // Aquí se asume que cada nodo está representado por un objeto JavaFX (por ejemplo, un Circle)
+            Circle nodoCircle = nodosCircles.get(nodo);  // Obtener el círculo del nodo
+            nodoCircle.setFill(Color.RED);  // Cambiar el color del nodo
+        }
+    }
+    
+    // Método para cambiar el color de las aristas que forman parte del camino más corto
+    private void highlightEdges(List<int[]> aristasCamino) {
+        for (int[] arista : aristasCamino) {
+            int nodoOrigen = arista[0] + 1;  // Ajustar los índices de nodo para el mapa (de 0-5 a 1-6)
+            int nodoDestino = arista[1] + 1;
+
+            // Construir el identificador de la arista en el formato "nodoOrigen-nodoDestino"
+            String idArista = nodoOrigen + "-" + nodoDestino;
+
+            // Verificar si existe la arista en el mapa
+            Line aristaLine = aristasMap.get(idArista);
+            if (aristaLine != null) {
+                aristaLine.setStroke(Color.RED);  // Cambiar el color de la arista a rojo
+            }
+        }
+    }
+    
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle(titulo);
@@ -669,12 +745,12 @@ private void connectToBluetooth() {
         for (int i = 0; i < grafo.length; i++) {
             data.add(new RowData(
                 String.valueOf(i + 1), // Índice de la fila
-                grafo[i][0] == INF ? "INF" : String.valueOf(grafo[i][0]),
-                grafo[i][1] == INF ? "INF" : String.valueOf(grafo[i][1]),
-                grafo[i][2] == INF ? "INF" : String.valueOf(grafo[i][2]),
-                grafo[i][3] == INF ? "INF" : String.valueOf(grafo[i][3]),
-                grafo[i][4] == INF ? "INF" : String.valueOf(grafo[i][4]),
-                grafo[i][5] == INF ? "INF" : String.valueOf(grafo[i][5])
+                grafo[i][0] == INF ? "∞" : String.valueOf(grafo[i][0]),
+                grafo[i][1] == INF ? "∞" : String.valueOf(grafo[i][1]),
+                grafo[i][2] == INF ? "∞" : String.valueOf(grafo[i][2]),
+                grafo[i][3] == INF ? "∞" : String.valueOf(grafo[i][3]),
+                grafo[i][4] == INF ? "∞" : String.valueOf(grafo[i][4]),
+                grafo[i][5] == INF ? "∞" : String.valueOf(grafo[i][5])
             ));
         }
 
@@ -691,6 +767,39 @@ private void connectToBluetooth() {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+         // Mapear cada nodo (número) al círculo correspondiente
+        nodosCircles = new HashMap<>();
+        nodosCircles.put(0, v1);
+        nodosCircles.put(1, v2);
+        nodosCircles.put(2, v3);
+        nodosCircles.put(3, v4);
+        nodosCircles.put(4, v5);
+        nodosCircles.put(5, v6);
+        
+        // Mapear las aristas usando un identificador "nodo1-nodo2"
+        aristasMap = new HashMap<>();
+        aristasMap.put("1-2", e1Line);
+        aristasMap.put("2-1", e1Line);
+        aristasMap.put("2-6", e2Line);
+        aristasMap.put("6-2", e2Line);
+        aristasMap.put("2-3", e3Line);
+        aristasMap.put("3-2", e3Line);
+        aristasMap.put("2-4", e4Line);
+        aristasMap.put("2-4", e4Line);
+        aristasMap.put("4-6", e5Line);
+        aristasMap.put("6-4", e5Line);
+        aristasMap.put("6-5", e6Line);
+        aristasMap.put("5-6", e6Line);
+        aristasMap.put("1-3", e7Line);
+        aristasMap.put("3-1", e7Line);
+        aristasMap.put("3-4", e8Line);
+        aristasMap.put("4-3", e8Line);
+        aristasMap.put("4-5", e9Line);
+        aristasMap.put("5-4", e9Line);
+        aristasMap.put("3-5", e10Line);
+        aristasMap.put("5-3", e10Line);
+        
+        
         // Configurar las columnas de la tabla con las propiedades del RowData
         rowIndexColumn.setCellValueFactory(cellData -> cellData.getValue().rowIndexProperty());
         col1.setCellValueFactory(cellData -> cellData.getValue().col1Property());
