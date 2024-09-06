@@ -80,8 +80,10 @@
          </children>
       </Pane>
       <Label layoutX="477.0" layoutY="41.0" prefHeight="71.0" prefWidth="199.0" text="Algoritmo -Floyd-Warshall" wrapText="true" />
-      <Label fx:id="costoTotal" layoutX="811.0" layoutY="340.0" text="NULL" />
-      <Label layoutX="769.0" layoutY="303.0" text="La distancia total es" />
+      <Label fx:id="costoTotal" layoutX="825.0" layoutY="589.0" text="NULL" />
+      <Label layoutX="793.0" layoutY="566.0" text="La distancia total es" />
+      <Button layoutX="845.0" layoutY="381.0" mnemonicParsing="false" onAction="#sendLedOn" text="ON" />
+      <Button layoutX="839.0" layoutY="450.0" mnemonicParsing="false" onAction="#sendLedOff" text="OFF" />
 
    </children>
 </AnchorPane>
