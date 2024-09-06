@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -12,20 +11,14 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.algoritmo.floyd.warshall.mainViewController">
-        <stylesheets>
-        <URL value="@/styles/mainView.css" />
-        </stylesheets>
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1000.0" stylesheets="@/styles/mainView.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.algoritmo.floyd.warshall.mainViewController">
    <children>
       <Button fx:id="connectButton" layoutX="793.0" layoutY="45.0" mnemonicParsing="false" onAction="#connectToBluetooth" text="Conectar" />
       <Button layoutX="491.0" layoutY="233.0" mnemonicParsing="false" onAction="#hallarRutaMasCorta" text="Hallar camino" />
       <Button layoutX="793.0" layoutY="98.0" mnemonicParsing="false" onAction="#disconnectBluetooth" text="Desconectar" />
-      <Button layoutX="886.0" layoutY="322.0" mnemonicParsing="false" onAction="#sendLedOn" text="ON" />
-      <Button layoutX="885.0" layoutY="436.0" mnemonicParsing="false" onAction="#sendLedOff" text="OFF" />
       <Button layoutX="791.0" layoutY="233.0" mnemonicParsing="false" onAction="#readSerial" text="Actualizar" />
-      <Text layoutX="473.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Algoritmo -Floyd-Warshall" wrappingWidth="383.09765625" />
-      <TextField fx:id="origenTF" layoutX="531.0" layoutY="163.0" />
-      <TextField fx:id="destinoTF" layoutX="783.0" layoutY="163.0" />
+      <TextField fx:id="origenTF" layoutX="566.0" layoutY="172.0" prefHeight="25.0" prefWidth="64.0" />
+      <TextField fx:id="destinoTF" layoutX="813.0" layoutY="172.0" prefHeight="25.0" prefWidth="64.0" />
       <Label layoutX="473.0" layoutY="167.0" text="Desde:" />
       <Label layoutX="728.0" layoutY="167.0" text="Hasta: " />
 <TableView fx:id="adjacencyMatrixTable" layoutX="32.0" layoutY="30.0" prefHeight="290.0" prefWidth="425.0">
@@ -39,7 +32,7 @@
         <TableColumn fx:id="col6" text="6" />
     </columns>
 </TableView>
-      <Pane layoutX="14.0" layoutY="306.0" prefHeight="426.0" prefWidth="807.0">
+      <Pane layoutX="14.0" layoutY="292.0" prefHeight="426.0" prefWidth="807.0">
          <children>
             <Line fx:id="e1Line" endX="146.0" endY="1.0" layoutX="111.0" layoutY="107.0" startX="-26.0" startY="97.0" />
             <Line fx:id="e7Line" endX="129.0" endY="238.0" layoutX="121.0" layoutY="117.0" startX="-45.0" startY="139.0" />
@@ -86,6 +79,9 @@
             <Label fx:id="p10Label" layoutX="498.0" layoutY="333.0" text="600" />
          </children>
       </Pane>
+      <Label layoutX="477.0" layoutY="41.0" prefHeight="71.0" prefWidth="199.0" text="Algoritmo -Floyd-Warshall" wrapText="true" />
+      <Label fx:id="costoTotal" layoutX="811.0" layoutY="340.0" text="NULL" />
+      <Label layoutX="769.0" layoutY="303.0" text="La distancia total es" />
 
    </children>
 </AnchorPane>

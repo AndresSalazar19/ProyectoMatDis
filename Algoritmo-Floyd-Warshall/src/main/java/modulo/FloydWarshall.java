@@ -81,15 +81,5 @@ public class FloydWarshall {
         }
     }
     
-    // Método para obtener la lista de aristas a partir de la lista de nodos del camino más corto
-    public List<int[]> obtenerAristas(List<Integer> path) {
-        List<int[]> aristas = new ArrayList<>();
-        for (int k = 0; k < path.size() - 1; k++) {
-            int origen = path.get(k);
-            int destino = path.get(k + 1);
-            aristas.add(new int[]{origen, destino});  // Agregar la arista (origen, destino)
-        }
-        return aristas;
-    }
 }
 

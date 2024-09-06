@@ -48,9 +48,9 @@
 }
 
 .small-button {
-    -fx-font-size: 10px;     /* Tamaño de la fuente más pequeño */
-    -fx-padding: 5px;        /* Menos espacio alrededor del texto */
-    -fx-background-radius: 5px; /* Bordes más redondeados */
-    -fx-min-width: 40px;     /* Ancho mínimo */
-    -fx-min-height: 20px;    /* Alto mínimo */
+    -fx-font-size: 10px;  
+    -fx-padding: 5px;       
+    -fx-background-radius: 5px; 
+    -fx-min-width: 40px;     
+    -fx-min-height: 20px;   
 }

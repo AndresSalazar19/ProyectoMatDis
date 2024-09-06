@@ -14,6 +14,8 @@ import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,6 +32,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.util.Duration;
 import modulo.FloydWarshall;
 import modulo.RowData;
 
@@ -60,7 +63,8 @@ public class mainViewController implements Initializable{
     private Line e9Line;
     @FXML
     private Line e10Line;      
-    
+    @FXML
+    private Label costoTotal;
     @FXML
     private TextField origenTF;
 
@@ -328,7 +332,7 @@ private void connectToBluetooth() {
             int origen = Integer.parseInt(origenTF.getText());
             int destino = Integer.parseInt(destinoTF.getText());
 
-            // Validar que los nodos estén en el rango [1-6]
+         
             if (origen < 1 || origen > 6 || destino < 1 || destino > 6) {
                 mostrarAlerta("Error de entrada", "Los nodos deben estar entre 1 y 6.");
                 return;
@@ -339,27 +343,27 @@ private void connectToBluetooth() {
             destino--;
 
             FloydWarshall fw = new FloydWarshall();
-            // Ejecutar el algoritmo de Floyd-Warshall
             int[][] next = fw.floydWarshall(grafo);
             fw.printSolution(next);
-            System.out.println("aass");
-            // Mostrar la ruta en la consola o en un componente gráfico
-            //fw.printPath(origen, destino, next);
             // Obtener la ruta más corta
             List<Integer> path = fw.printPath(origen, destino, next);
-
-            // Encender los LEDs correspondientes al camino
-            for (int nodo : path) {
-                sendLedOnForNode(nodo);  // Enviar comando para encender LED del nodo
+            
+            // Calcular el costo total de la ruta más corta
+            int costo = 0;
+            for (int i = 0; i < path.size() - 1; i++) {
+                int nodoActual = path.get(i);
+                int nodoSiguiente = path.get(i + 1);
+                costo += grafo[nodoActual][nodoSiguiente];  // Sumar el costo entre nodos consecutivos
             }
 
-            // Cambiar los colores de los vértices en la interfaz JavaFX
-            highlightPath(path);
-             // Obtener la lista de aristas correspondientes al camino
-            List<int[]> aristasCamino = fw.obtenerAristas(path);
+            // Actualizar el Label con el costo total
+            costoTotal.setText(""+costo);
+            
+            for (int nodo : path) {
+                sendLedOnForNode(nodo);  
+            }
 
-            // Cambiar el color de las aristas que forman parte del camino
-            highlightEdges(aristasCamino);
+            highlightPath(path);
 
         } catch (NumberFormatException e) {
             mostrarAlerta("Error de entrada", "Por favor, ingrese números válidos.");
@@ -368,8 +372,8 @@ private void connectToBluetooth() {
  
     private void obtenerColorOriginal(){
         for(int i=0; i<6;i++){
-            Circle nodoCircle = nodosCircles.get(i);  // Obtener el círculo del nodo
-            nodoCircle.setFill(Color.BLUE);  // Cambiar el color del nodo
+            Circle nodoCircle = nodosCircles.get(i);  
+            nodoCircle.setFill(Color.web("#1e90ff"));  
         }
         for(String key: aristasMap.keySet()){
             Line nodoLine= aristasMap.get(key);
@@ -378,35 +382,39 @@ private void connectToBluetooth() {
     }
     
     private void sendLedOnForNode(int node) {
-        String command = String.valueOf(node + 1);  // Convertir nodo a cadena para enviar el comando
-        sendCommand(command);  // Enviar comando a través de serial
+        String command = String.valueOf(node + 1);  
+        sendCommand(command);  
     }
     
     private void highlightPath(List<Integer> path) {
-        // Supongamos que tienes una lista de nodos representados por círculos o cualquier componente gráfico
-        for (int nodo : path) {
-            // Aquí se asume que cada nodo está representado por un objeto JavaFX (por ejemplo, un Circle)
-            Circle nodoCircle = nodosCircles.get(nodo);  // Obtener el círculo del nodo
-            nodoCircle.setFill(Color.RED);  // Cambiar el color del nodo
-        }
-    }
-    
-    // Método para cambiar el color de las aristas que forman parte del camino más corto
-    private void highlightEdges(List<int[]> aristasCamino) {
-        for (int[] arista : aristasCamino) {
-            int nodoOrigen = arista[0] + 1;  // Ajustar los índices de nodo para el mapa (de 0-5 a 1-6)
-            int nodoDestino = arista[1] + 1;
+        Timeline timeline = new Timeline();
+        Duration delay = Duration.seconds(1); 
 
-            // Construir el identificador de la arista en el formato "nodoOrigen-nodoDestino"
-            String idArista = nodoOrigen + "-" + nodoDestino;
+        for (int i = 0; i < path.size(); i++) {
+            final int nodo = path.get(i); 
+            final int nextNodo = (i + 1 < path.size()) ? path.get(i + 1) : -1; 
 
-            // Verificar si existe la arista en el mapa
-            Line aristaLine = aristasMap.get(idArista);
-            if (aristaLine != null) {
-                aristaLine.setStroke(Color.RED);  // Cambiar el color de la arista a rojo
+            KeyFrame frame = new KeyFrame(delay.multiply(i), e -> {
+                Circle nodoCircle = nodosCircles.get(nodo);
+                nodoCircle.setFill(Color.web("#fe8381")); 
+            });
+            timeline.getKeyFrames().add(frame);
+
+            if (nextNodo != -1) {
+                final String idArista = (nodo + 1) + "-" + (nextNodo + 1);
+                KeyFrame edgeFrame = new KeyFrame(delay.multiply(i + 0.5), e -> {
+                    Line aristaLine = aristasMap.get(idArista);
+                    if (aristaLine != null) {
+                        aristaLine.setStroke(Color.RED); 
+                    }
+                });
+                timeline.getKeyFrames().add(edgeFrame);
             }
         }
+
+        timeline.play(); 
     }
+    
     
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(AlertType.ERROR);
@@ -416,11 +424,6 @@ private void connectToBluetooth() {
         alert.showAndWait();
     }
     
-
-    
-    public void insertarArista1(int peso){
-        
-    }
     
     @FXML
     private void e1() {
@@ -485,20 +488,17 @@ private void connectToBluetooth() {
     @FXML
     private void e3() {
         if (grafo[1][2] == INF) {
-            // Crear el diálogo de entrada de texto para ingresar el peso
             TextInputDialog dialog = new TextInputDialog();
             dialog.setTitle("Insertar Arista");
             dialog.setHeaderText("Ingrese el peso de la arista e3: ");
             dialog.setContentText("Peso:");
 
-            // Mostrar el diálogo y esperar la respuesta del usuario
             dialog.showAndWait().ifPresent(response -> {
                 try {
                     int peso = Integer.parseInt(response);
 
-                    // Validar que el peso sea mayor que 0 y menor que 10000
                     if (peso > 0 && peso < 10000) {
-                        insertarArista(1, 2, peso); // Insertar la arista con el peso proporcionado
+                        insertarArista(1, 2, peso); 
                         e3Line.setVisible(true);
                         p3Label.setText(String.valueOf(peso));
                         p3Label.setVisible(true);
@@ -728,15 +728,15 @@ private void connectToBluetooth() {
     }
 
     private void eliminarArista(int nodo1, int nodo2) {
-        grafo[nodo1][nodo2] = INF; // Eliminar la arista en la matriz de adyacencia
-        grafo[nodo2][nodo1] = INF; // Dado que es un grafo no dirigido, eliminamos ambas direcciones
-        actualizarTabla();         // Actualizar la tabla para reflejar los cambios en la matriz
+        grafo[nodo1][nodo2] = INF; 
+        grafo[nodo2][nodo1] = INF; 
+        actualizarTabla(); 
     }
     
     private void insertarArista(int nodo1, int nodo2, int peso) {
-        grafo[nodo1][nodo2] = peso; // Insertar la arista en la matriz de adyacencia con el peso especificado
-        grafo[nodo2][nodo1] = peso; // Para un grafo no dirigido, también actualiza la otra dirección
-        actualizarTabla(); // Actualizar la tabla para reflejar los cambios
+        grafo[nodo1][nodo2] = peso; 
+        grafo[nodo2][nodo1] = peso; 
+        actualizarTabla(); 
     }
         
     private void actualizarTabla() {
@@ -785,7 +785,7 @@ private void connectToBluetooth() {
         aristasMap.put("2-3", e3Line);
         aristasMap.put("3-2", e3Line);
         aristasMap.put("2-4", e4Line);
-        aristasMap.put("2-4", e4Line);
+        aristasMap.put("4-2", e4Line);
         aristasMap.put("4-6", e5Line);
         aristasMap.put("6-4", e5Line);
         aristasMap.put("6-5", e6Line);
@@ -799,8 +799,6 @@ private void connectToBluetooth() {
         aristasMap.put("3-5", e10Line);
         aristasMap.put("5-3", e10Line);
         
-        
-        // Configurar las columnas de la tabla con las propiedades del RowData
         rowIndexColumn.setCellValueFactory(cellData -> cellData.getValue().rowIndexProperty());
         col1.setCellValueFactory(cellData -> cellData.getValue().col1Property());
         col2.setCellValueFactory(cellData -> cellData.getValue().col2Property());
@@ -808,8 +806,7 @@ private void connectToBluetooth() {
         col4.setCellValueFactory(cellData -> cellData.getValue().col4Property());
         col5.setCellValueFactory(cellData -> cellData.getValue().col5Property());
         col6.setCellValueFactory(cellData -> cellData.getValue().col6Property());
-
-        // Llenar la tabla con la matriz de adyacencia
+    
         actualizarTabla();
     }
 }
